@@ -7,22 +7,20 @@ module.exports = ({ env }) => {
     const config = parse(process.env.DATABASE_URL);
     return {
       defaultConnection: 'default',
-      connections: {
-        default: {
-          connector: 'bookshelf',
-          settings: {
-            client: 'postgresql',
+        connection: {
+          client: "postgres",
+          connection: {
             host: config.host,
             port: config.port,
-            user: config.user,
-            password: config.password,
-            database: config.database
+            database: config.database,
+            username: config.user,
+            password: password: config.password,
+            schema: env("DATABASE_SCHEMA", "public"),
           },
           options: {
             ssl: false
           }
         }
-      }
     };
   }
 
