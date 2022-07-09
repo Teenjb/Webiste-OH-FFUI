@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "preorders",
+  "info": {
+    "singularName": "preorder",
+    "pluralName": "preorders",
+    "displayName": "Preorder"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "preorderID": {
+      "type": "uid"
+    },
+    "merchandises": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::merchandise.merchandise"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "preorder"
+    }
+  }
+}
