@@ -14,7 +14,7 @@ module.exports = ({ env }) => {
             port: config.port,
             database: config.database,
             username: config.user,
-            password: password: config.password,
+            password: config.password,
             schema: env("DATABASE_SCHEMA", "public"),
           },
           options: {
