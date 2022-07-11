@@ -4,7 +4,8 @@
   "info": {
     "singularName": "preorder",
     "pluralName": "preorders",
-    "displayName": "Preorder"
+    "displayName": "Preorder",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -24,6 +25,15 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "mappedBy": "preorder"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Requested",
+        "Confirmed",
+        "Delivered",
+        "Received"
+      ]
     }
   }
 }

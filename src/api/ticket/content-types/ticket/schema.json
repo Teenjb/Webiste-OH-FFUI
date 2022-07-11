@@ -13,13 +13,28 @@
   "pluginOptions": {},
   "attributes": {
     "ticketID": {
-      "type": "uid"
+      "type": "uid",
+      "required": true
     },
     "user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "mappedBy": "ticket"
+    },
+    "paymentPhoto": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "paymentValidation": {
+      "type": "boolean"
     }
   }
 }
