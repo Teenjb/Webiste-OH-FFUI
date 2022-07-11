@@ -3,7 +3,7 @@ const parse = require('pg-connection-string');
 
 module.exports = ({ env }) => {
   
- //if(env('NODE_ENV') === 'production') {
+ if(env('NODE_ENV') === 'production') {
     const config = parse(process.env.DATABASE_URL);
     return {
       defaultConnection: 'default',
@@ -22,7 +22,7 @@ module.exports = ({ env }) => {
         debug: false,
       }
     };
-  //}
+  }
 
   return{
   connection: {
