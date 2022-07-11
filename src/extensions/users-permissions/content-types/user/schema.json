@@ -74,6 +74,18 @@
       "relation": "oneToOne",
       "target": "api::ticket.ticket",
       "inversedBy": "user"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "biginteger"
+    },
+    "schoolOrigin": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
     }
   }
 }
