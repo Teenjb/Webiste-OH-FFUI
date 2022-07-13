@@ -76,16 +76,20 @@
       "inversedBy": "user"
     },
     "fullName": {
-      "type": "string"
-    },
-    "phoneNumber": {
-      "type": "biginteger"
+      "type": "string",
+      "required": false
     },
     "schoolOrigin": {
-      "type": "string"
+      "type": "string",
+      "required": false
     },
     "address": {
-      "type": "text"
+      "type": "text",
+      "required": false
+    },
+    "phoneNumber": {
+      "type": "string",
+      "unique": true
     }
   }
 }
