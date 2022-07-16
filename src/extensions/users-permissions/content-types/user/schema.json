@@ -90,6 +90,12 @@
     "phoneNumber": {
       "type": "string",
       "unique": true
+    },
+    "competitions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::competition.competition",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

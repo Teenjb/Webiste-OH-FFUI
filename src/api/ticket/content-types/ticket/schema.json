@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -35,6 +35,14 @@
     },
     "paymentValidation": {
       "type": "boolean"
+    },
+    "ticketType": {
+      "type": "enumeration",
+      "enum": [
+        "Hybrid",
+        "Online"
+      ],
+      "required": true
     }
   }
 }
