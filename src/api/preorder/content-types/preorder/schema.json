@@ -8,13 +8,10 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "preorderID": {
-      "type": "uid"
-    },
     "merchandises": {
       "type": "relation",
       "relation": "oneToMany",
@@ -35,7 +32,7 @@
         "Received"
       ]
     },
-    "Date": {
+    "date": {
       "required": true,
       "type": "date"
     }

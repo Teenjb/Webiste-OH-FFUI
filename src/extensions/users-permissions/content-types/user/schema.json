@@ -69,12 +69,6 @@
       "target": "api::preorder.preorder",
       "inversedBy": "user"
     },
-    "ticket": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::ticket.ticket",
-      "inversedBy": "user"
-    },
     "fullName": {
       "type": "string",
       "required": false
@@ -96,6 +90,12 @@
       "relation": "oneToMany",
       "target": "api::competition.competition",
       "mappedBy": "users_permissions_user"
+    },
+    "ticket": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ticket.ticket",
+      "inversedBy": "user"
     }
   }
 }
