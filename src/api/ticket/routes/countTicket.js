@@ -2,7 +2,7 @@ module.exports = {
     routes: [
         { // Path defined with a URL parameter
             method: 'GET',
-            path: '/ticket/count',
+            path: '/tickets/count',
             handler: 'ticket.count',
         }
     ]
