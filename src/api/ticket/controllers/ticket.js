@@ -9,7 +9,9 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::ticket.ticket', {
     async count(ctx) {
         var { query } = ctx.request;
-        const count = await strapi.db.query('api::ticket.ticket').count( query );
+        const count = await strapi.db.query('api::ticket.ticket').count ({
+            where: query
+        });
 
         console.log(query.ticketType)
         console.log(count)
@@ -41,7 +43,9 @@ module.exports = createCoreController('api::ticket.ticket', {
             }
         }
         else {
-            return strapi.badRequest('Ticket type is not valid')
+            return ctx.send({
+                status: 'Invalid ticket type'
+            })
         }
     }
 });
