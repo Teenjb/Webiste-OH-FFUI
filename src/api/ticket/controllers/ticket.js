@@ -9,43 +9,66 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::ticket.ticket', {
     async count(ctx) {
         var { query } = ctx.request;
-        const count = await strapi.db.query('api::ticket.ticket').count ({
-            where: query
+        const countOnline = await strapi.db.query('api::ticket.ticket').count ({
+            where: {
+                ticketType: 'Online'
+            }
+        });
+        
+        const countHybrid = await strapi.db.query('api::ticket.ticket').count ({
+            where: {
+                ticketType: 'Hybrid'
+            }
         });
 
-        console.log(query.ticketType)
-        console.log(count)
-
-        if (query.ticketType == 'Online') {
-            if (count < 500) {
-                ctx.send({
-                    count: count,
-                    status: 'Online ticket is available'
-                })
-            } else {
-                ctx.send({
-                    count: count,
-                    status: 'Online ticket is already sold out'
-                })
+        if (countOnline < 500) {
+            if (countHybrid < 75) {
+                return ctx.send({
+                    countOnline: countOnline,
+                    statusOnline: 'Online available',
+                    countHybrid: countHybrid,
+                    statusHybrid: 'Hybrid available'
+                });
             }
-        }
-        else if (query.ticketType == 'Hybrid') {
-            if (count < 75) {
-                ctx.send({
-                    count: count,
-                    status: 'Hybrid ticket is available'
-                })
-            } else {
-                ctx.send({
-                    count: count,
-                    status: 'Hybrid ticket is already sold out'
-                })
+            else if (countHybrid >= 75) {
+                return ctx.send({
+                    countOnline: countOnline,
+                    statusOnline: 'Online available',
+                    countHybrid: countHybrid,
+                    statusHybrid: 'Hybrid unavailable'
+                });
             }
         }
         else {
-            return ctx.send({
-                status: 'Invalid ticket type'
-            })
+            if (countHybrid < 75) {
+                return ctx.send({
+                    countOnline: countOnline,
+                    statusOnline: 'Online unavailable',
+                    countHybrid: countHybrid,
+                    statusHybrid: 'Hybrid available'
+                });
+            }
+            else if (countHybrid >= 75) {
+                return ctx.send({
+                    countOnline: countOnline,
+                    statusOnline: 'Online unavailable',
+                    countHybrid: countHybrid,
+                    statusHybrid: 'Hybrid unavailable'
+                });
+            }
         }
+    },
+
+    async create(ctx) {
+        var { query } = ctx.request;
+        const { ticketID, ticketType, user } = ctx.request.body;
+        
+        console.log(ticketID);
+        console.log(ticketType);
+        console.log(user);
+
+        return ctx.send({
+            status: 'Ticket created'
+        })
     }
 });
