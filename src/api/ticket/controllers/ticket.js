@@ -60,14 +60,23 @@ module.exports = createCoreController('api::ticket.ticket', {
     },
 
     async create(ctx) {
-        var { query } = ctx.request;
-        const { ticketID, ticketType, user } = ctx.request.body.data;
+        const { ticketID, ticketType } = ctx.request.body.data;
+        const { user } = ctx.state;
         
         console.log(ticketID);
         console.log(ticketType);
-        console.log(user);
+        console.log(user.id);
+        
+        const entry = await strapi.entityService.create('api::ticket.ticket', {
+            data: {
+                ticketID: ticketID,
+                ticketType: ticketType,
+                user: user.id
+            }
+        });
 
         return ctx.send({
+            entry: entry,
             status: 'Ticket created'
         })
     }
