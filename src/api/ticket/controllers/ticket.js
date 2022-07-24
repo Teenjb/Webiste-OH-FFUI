@@ -61,7 +61,7 @@ module.exports = createCoreController('api::ticket.ticket', {
 
     async create(ctx) {
         var { query } = ctx.request;
-        const { ticketID, ticketType, user } = ctx.request.body;
+        const { ticketID, ticketType, user } = ctx.request.body.data;
         
         console.log(ticketID);
         console.log(ticketType);
