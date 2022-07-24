@@ -5,10 +5,11 @@
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
+const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
+var FormData = require('form-data');
 
 module.exports = createCoreController('api::ticket.ticket', {
     async count(ctx) {
-        var { query } = ctx.request;
         const countOnline = await strapi.db.query('api::ticket.ticket').count ({
             where: {
                 ticketType: 'Online'
@@ -60,24 +61,47 @@ module.exports = createCoreController('api::ticket.ticket', {
     },
 
     async create(ctx) {
-        const { ticketID, ticketType } = ctx.request.body.data;
         const { user } = ctx.state;
-        
-        console.log(ticketID);
-        console.log(ticketType);
-        console.log(user.id);
-        
-        const entry = await strapi.entityService.create('api::ticket.ticket', {
-            data: {
-                ticketID: ticketID,
-                ticketType: ticketType,
-                user: user.id
-            }
-        });
 
-        return ctx.send({
-            entry: entry,
-            status: 'Ticket created'
-        })
+        //Kalau post form data
+        if (ctx.is('multipart')) {
+            const { data, files } = parseMultipartData(ctx);
+
+            console.log(files);
+            console.log(user.id);
+
+            const entryImage = await strapi.service('api::ticket.ticket').create({ data, files });
+            
+            const updateEntry = await strapi.entityService.update('api::ticket.ticket', entryImage.id, {
+                data: {
+                    user: user.id
+                },
+            });
+
+            return ctx.send({
+                entry: updateEntry,
+                status: 'Ticket created'
+            })
+        }
+        //Kalau post raw data
+        else {
+            const { ticketID, ticketType } = ctx.request.body.data;
+
+            console.log(ticketID);
+            console.log(ticketType);
+
+            const entrySingle = await strapi.entityService.create('api::ticket.ticket', {
+                data: {
+                    ticketID: ticketID,
+                    ticketType: ticketType,
+                    user: user.id
+                }
+            });
+
+            return ctx.send({
+                entry: entrySingle,
+                status: 'Ticket created'
+            })
+        }
     }
 });
