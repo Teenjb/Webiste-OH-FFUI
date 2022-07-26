@@ -82,25 +82,25 @@ module.exports = createCoreController('api::ticket.ticket', {
             })
         }
         //Kalau post raw data
-        else {
-            //Temporary biar bisa post tanpa gambar dulu
-            const { ticketID, ticketType } = ctx.request.body.data;
+        // else {
+        //     //Temporary biar bisa post tanpa gambar dulu
+        //     const { ticketID, ticketType } = ctx.request.body.data;
 
-            console.log(ticketID);
-            console.log(ticketType);
+        //     console.log(ticketID);
+        //     console.log(ticketType);
 
-            const entrySingle = await strapi.entityService.create('api::ticket.ticket', {
-                data: {
-                    ticketID: ticketID,
-                    ticketType: ticketType,
-                    user: user.id
-                }
-            });
+        //     const entrySingle = await strapi.entityService.create('api::ticket.ticket', {
+        //         data: {
+        //             ticketID: ticketID,
+        //             ticketType: ticketType,
+        //             user: user.id
+        //         }
+        //     });
 
-            return ctx.send({
-                entry: entrySingle,
-                status: 'Ticket created'
-            })
-        }
+        //     return ctx.send({
+        //         entry: entrySingle,
+        //         status: 'Ticket created'
+        //     })
+        // }
     }
 });
