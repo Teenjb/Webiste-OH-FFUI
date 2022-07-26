@@ -6,7 +6,6 @@
 
 const { createCoreController } = require('@strapi/strapi').factories;
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
-var FormData = require('form-data');
 
 module.exports = createCoreController('api::ticket.ticket', {
     async count(ctx) {
@@ -62,7 +61,6 @@ module.exports = createCoreController('api::ticket.ticket', {
 
     async create(ctx) {
         const { user } = ctx.state;
-
         //Kalau post form data
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
@@ -85,6 +83,7 @@ module.exports = createCoreController('api::ticket.ticket', {
         }
         //Kalau post raw data
         else {
+            //Temporary biar bisa post tanpa gambar dulu
             const { ticketID, ticketType } = ctx.request.body.data;
 
             console.log(ticketID);
