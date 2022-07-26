@@ -2,7 +2,7 @@ module.exports = {
     routes: [
         { // Path defined with a URL parameter
             method: 'POST',
-            path: '/competition/create',
+            path: '/competitions/create',
             handler: 'competition.create',
         }
     ]
