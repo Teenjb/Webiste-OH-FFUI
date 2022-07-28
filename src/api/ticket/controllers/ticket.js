@@ -68,16 +68,16 @@ module.exports = createCoreController('api::ticket.ticket', {
             console.log(files);
             console.log(user.id);
 
-            const entryImage = await strapi.service('api::ticket.ticket').create({ data, files });
+            const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
             
-            const updateEntry = await strapi.entityService.update('api::ticket.ticket', entryImage.id, {
+            const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
                 data: {
                     user: user.id
                 },
             });
 
             return ctx.send({
-                entry: updateEntry,
+                entry: updateTicket,
                 status: 'Ticket created'
             })
         }

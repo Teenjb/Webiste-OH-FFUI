@@ -32,9 +32,19 @@
         "Received"
       ]
     },
-    "date": {
-      "required": true,
-      "type": "date"
+    "paymentPhoto": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "paymentValidation": {
+      "type": "boolean"
     }
   }
 }
