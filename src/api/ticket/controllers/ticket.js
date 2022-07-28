@@ -102,5 +102,24 @@ module.exports = createCoreController('api::ticket.ticket', {
         //         status: 'Ticket created'
         //     })
         // }
+    },
+
+    async getTicket(ctx) {
+        const user = ctx.state.user;
+        const ticket = await strapi.entityService.findMany('api::ticket.ticket', {
+            filters: {
+                user: {
+                    id: user.id
+                }
+            },
+            populate: {
+                user: true
+            }
+        });
+
+        return ctx.send({
+            entry: ticket,
+            status: 'List ticket'
+        });   
     }
 });

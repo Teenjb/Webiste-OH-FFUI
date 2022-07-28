@@ -14,7 +14,6 @@ module.exports = createCoreController('api::preorder.preorder', {
             const { data, files } = parseMultipartData(ctx);
 
             console.log(data);
-            console.log(now);
             console.log(user.id);
 
             const entryPreorder = await strapi.service('api::preorder.preorder').create({ data, files });
