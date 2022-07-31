@@ -10,6 +10,11 @@ const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
 module.exports = createCoreController('api::preorder.preorder', {
     async create(ctx) {
         const user = ctx.state.user;
+
+        if (!user) {
+            return ctx.unauthorized();
+        }
+
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
 
