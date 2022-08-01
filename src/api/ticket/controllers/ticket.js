@@ -61,6 +61,10 @@ module.exports = createCoreController('api::ticket.ticket', {
 
     async create(ctx) {
         const { user } = ctx.state;
+        
+        if (!user) {
+            return ctx.unauthorized();
+        }
         //Kalau post form data
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);

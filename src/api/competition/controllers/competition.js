@@ -11,13 +11,17 @@ module.exports = createCoreController('api::competition.competition', {
     async create(ctx) {
         const { user } = ctx.state;
 
+        if (!user) {
+            return ctx.unauthorized();
+        }
+
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
             
             const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
                 where: {
                     users_permissions_user: user.id,
-                    competitionType: data.competitionType
+                    jenisLomba: data.jenisLomba
                 }
             });
 
