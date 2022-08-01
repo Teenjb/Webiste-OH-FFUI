@@ -47,5 +47,31 @@ module.exports = createCoreController('api::competition.competition', {
                 })
             }
         }
+    },
+
+    async checkMyCompetition(ctx) {
+        const { user } = ctx.state;
+
+        if (!user) {
+            return ctx.unauthorized();
+        }
+
+        const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
+            where: {
+                users_permissions_user: user.id
+            }
+        });
+
+        if (checkCompetition.length > 0) {
+            return ctx.send({
+                entry: checkCompetition,
+                status: 'Competition exists'
+            });
+        }
+        else {
+            return ctx.send({
+                status: 'Competition not exists'
+            });
+        }
     }
 });
