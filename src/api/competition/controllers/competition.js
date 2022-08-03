@@ -17,7 +17,11 @@ module.exports = createCoreController('api::competition.competition', {
 
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
-            
+
+            if (data.namaProyek.length === 0 || data.jenisLomba.length === 0) {
+                return ctx.badRequest('Nama proyek dan jenis lomba tidak boleh kosong');
+            }
+
             const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
                 where: {
                     users_permissions_user: user.id,
@@ -47,10 +51,14 @@ module.exports = createCoreController('api::competition.competition', {
                 })
             }
         }
+        else {
+            return ctx.badRequest();
+        }
     },
 
     async checkMyCompetition(ctx) {
         const { user } = ctx.state;
+        const { jenisLomba } = ctx.query;
 
         if (!user) {
             return ctx.unauthorized();
@@ -58,7 +66,8 @@ module.exports = createCoreController('api::competition.competition', {
 
         const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
             where: {
-                users_permissions_user: user.id
+                users_permissions_user: user.id,
+                jenisLomba: jenisLomba
             }
         });
 
