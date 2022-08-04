@@ -85,7 +85,7 @@ module.exports = createCoreController('api::ticket.ticket', {
                 }
             });
 
-            if (data.ticketType === 'Online' && countOnline < 3) {
+            if (data.ticketType === 'Online' && countOnline < 500) {
                 const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
 
                 const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
@@ -99,7 +99,7 @@ module.exports = createCoreController('api::ticket.ticket', {
                     status: 'Ticket created'
                 })
             }
-            else if (data.ticketType === 'Hybrid' && countHybrid < 5) {
+            else if (data.ticketType === 'Hybrid' && countHybrid < 75) {
                 const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
                 
                 const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
