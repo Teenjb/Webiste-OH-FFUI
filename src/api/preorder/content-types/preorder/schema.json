@@ -45,6 +45,9 @@
     },
     "paymentValidation": {
       "type": "boolean"
+    },
+    "notesPreorder": {
+      "type": "text"
     }
   }
 }
