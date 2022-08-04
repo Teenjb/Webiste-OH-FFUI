@@ -22,7 +22,6 @@ module.exports = createCoreController('api::preorder.preorder', {
             console.log(user.id);
 
             const entryPreorder = await strapi.service('api::preorder.preorder').create({ data, files });
-
             const updatePreorder = await strapi.entityService.update('api::preorder.preorder', entryPreorder.id, {
                 data: {
                     user: user.id,
