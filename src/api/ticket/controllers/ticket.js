@@ -69,43 +69,54 @@ module.exports = createCoreController('api::ticket.ticket', {
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
 
-            console.log(files);
-            console.log(user.id);
+            if (data.ticketType.length === 0) {
+                return ctx.badRequest('Ticket type is required');
+            }
 
-            const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
+            const countOnline = await strapi.db.query('api::ticket.ticket').count ({
+                where: {
+                    ticketType: 'Online'
+                }
+            });
             
-            const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
-                data: {
-                    user: user.id
-                },
+            const countHybrid = await strapi.db.query('api::ticket.ticket').count ({
+                where: {
+                    ticketType: 'Hybrid'
+                }
             });
 
-            return ctx.send({
-                entry: updateTicket,
-                status: 'Ticket created'
-            })
+            if (data.ticketType === 'Online' && countOnline < 3) {
+                const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
+
+                const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
+                    data: {
+                        user: user.id
+                    },
+                });
+                
+                return ctx.send({
+                    entry: updateTicket,
+                    status: 'Ticket created'
+                })
+            }
+            else if (data.ticketType === 'Hybrid' && countHybrid < 5) {
+                const entryTicket = await strapi.service('api::ticket.ticket').create({ data, files });
+                
+                const updateTicket = await strapi.entityService.update('api::ticket.ticket', entryTicket.id, {
+                    data: {
+                        user: user.id
+                    },
+                });
+
+                return ctx.send({
+                    entry: updateTicket,
+                    status: 'Ticket created'
+                })
+            }
+            else {
+                return ctx.badRequest('Ticket type is sold out');
+            }
         }
-        //Kalau post raw data
-        // else {
-        //     //Temporary biar bisa post tanpa gambar dulu
-        //     const { ticketID, ticketType } = ctx.request.body.data;
-
-        //     console.log(ticketID);
-        //     console.log(ticketType);
-
-        //     const entrySingle = await strapi.entityService.create('api::ticket.ticket', {
-        //         data: {
-        //             ticketID: ticketID,
-        //             ticketType: ticketType,
-        //             user: user.id
-        //         }
-        //     });
-
-        //     return ctx.send({
-        //         entry: entrySingle,
-        //         status: 'Ticket created'
-        //     })
-        // }
     },
 
     async getTicket(ctx) {
