@@ -17,42 +17,45 @@ module.exports = createCoreController('api::competition.competition', {
 
         if (ctx.is('multipart')) {
             const { data, files } = parseMultipartData(ctx);
-
-            if (data.namaProyek.length === 0 || data.jenisLomba.length === 0) {
-                return ctx.badRequest('Nama proyek dan jenis lomba tidak boleh kosong');
-            }
-
-            const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
-                where: {
-                    users_permissions_user: user.id,
-                    jenisLomba: data.jenisLomba
+            if(files.fileLomba.size>0){
+                if (data.namaProyek.length === 0 || data.jenisLomba.length === 0) {
+                    return ctx.badRequest('Nama proyek dan jenis lomba tidak boleh kosong');
                 }
-            });
-
-            console.log(checkCompetition);
-
-            if (checkCompetition.length > 0) {
-                return ctx.send({
-                    status: 'Competition already exists'
-                });
-            }
-            else {
-                const inputCompetition = await strapi.service('api::competition.competition').create({ data, files });
-
-                const updateCompetition = await strapi.entityService.update('api::competition.competition', inputCompetition.id, {
-                    data: {
-                        users_permissions_user: user.id
-                    },
+    
+                const checkCompetition = await strapi.db.query('api::competition.competition').findMany({
+                    where: {
+                        users_permissions_user: user.id,
+                        jenisLomba: data.jenisLomba
+                    }
                 });
     
-                return ctx.send({
-                    entry: updateCompetition,
-                    status: 'Competition created'
-                })
+                console.log(checkCompetition);
+    
+                if (checkCompetition.length > 0) {
+                    return ctx.send({
+                        status: 'Competition already exists'
+                    });
+                }
+                else {
+                    const inputCompetition = await strapi.service('api::competition.competition').create({ data, files });
+    
+                    const updateCompetition = await strapi.entityService.update('api::competition.competition', inputCompetition.id, {
+                        data: {
+                            users_permissions_user: user.id
+                        },
+                    });
+        
+                    return ctx.send({
+                        entry: updateCompetition,
+                        status: 'Competition created'
+                    })
+                }
+            }else{
+                return ctx.badRequest("Please add a file");
             }
         }
         else {
-            return ctx.badRequest();
+            return ctx.badRequest("Please add a file");
         }
     },
 

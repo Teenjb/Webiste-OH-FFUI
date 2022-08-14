@@ -38,14 +38,11 @@
         "audios"
       ]
     },
-    "paymentValidation": {
-      "type": "boolean"
-    },
-    "notesPreorder": {
-      "type": "text"
-    },
     "totalPrice": {
       "type": "string"
+    },
+    "Order": {
+      "type": "json"
     }
   }
 }
