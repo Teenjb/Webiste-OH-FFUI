@@ -22,14 +22,14 @@ module.exports = createCoreController("api::ticket.ticket", {
     });
 
     if (countOnline < 500) {
-      if (countHybrid < 75) {
+      if (countHybrid < 100) {
         return ctx.send({
           countOnline: countOnline,
           statusOnline: "Online available",
           countHybrid: countHybrid,
           statusHybrid: "Hybrid available",
         });
-      } else if (countHybrid >= 75) {
+      } else if (countHybrid >= 100) {
         return ctx.send({
           countOnline: countOnline,
           statusOnline: "Online available",
@@ -38,14 +38,14 @@ module.exports = createCoreController("api::ticket.ticket", {
         });
       }
     } else {
-      if (countHybrid < 75) {
+      if (countHybrid < 100) {
         return ctx.send({
           countOnline: countOnline,
           statusOnline: "Online unavailable",
           countHybrid: countHybrid,
           statusHybrid: "Hybrid available",
         });
-      } else if (countHybrid >= 75) {
+      } else if (countHybrid >= 100) {
         return ctx.send({
           countOnline: countOnline,
           statusOnline: "Online unavailable",
