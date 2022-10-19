@@ -102,7 +102,7 @@ module.exports = createCoreController("api::ticket.ticket", {
             entry: updateTicket,
             status: "Ticket created",
           });
-        } else if (data.ticketType === "Hybrid" && countHybrid < 75) {
+        } else if (data.ticketType === "Hybrid" && countHybrid < 100) {
           const entryTicket = await strapi
             .service("api::ticket.ticket")
             .create({ data, files });
