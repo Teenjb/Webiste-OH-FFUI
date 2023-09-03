@@ -79,22 +79,10 @@
       "type": "string",
       "unique": true
     },
-    "competitions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::competition.competition",
-      "mappedBy": "users_permissions_user"
-    },
     "ticket": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::ticket.ticket",
-      "inversedBy": "user"
-    },
-    "preorders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::preorder.preorder",
       "mappedBy": "user"
     }
   }

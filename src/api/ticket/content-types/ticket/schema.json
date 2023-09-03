@@ -31,8 +31,11 @@
     "ticketType": {
       "type": "enumeration",
       "enum": [
-        "Hybrid",
-        "Online"
+        "Day 1",
+        "Day 2",
+        "Day 2 (no workshop)",
+        "Bundle",
+        "Bundle (no workshop)"
       ],
       "required": true
     },

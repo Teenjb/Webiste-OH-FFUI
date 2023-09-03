@@ -9,55 +9,54 @@ const { parseMultipartData, sanitizeEntity } = require("strapi-utils");
 
 module.exports = createCoreController("api::ticket.ticket", {
   async count(ctx) {
-    const countOnline = await strapi.db.query("api::ticket.ticket").count({
+    const countDay1 = await strapi.db.query("api::ticket.ticket").count({
       where: {
-        ticketType: "Online",
+        ticketType: "Day 1",
       },
     });
 
-    const countHybrid = await strapi.db.query("api::ticket.ticket").count({
+    const countDay2 = await strapi.db.query("api::ticket.ticket").count({
       where: {
-        ticketType: "Hybrid",
+        ticketType: "Day 2",
       },
     });
 
-    if (countOnline < 500) {
-      if (countHybrid < 100) {
-        return ctx.send({
-          countOnline: countOnline,
-          statusOnline: "Online available",
-          countHybrid: countHybrid,
-          statusHybrid: "Hybrid available",
-        });
-      } else if (countHybrid >= 100) {
-        return ctx.send({
-          countOnline: countOnline,
-          statusOnline: "Online available",
-          countHybrid: countHybrid,
-          statusHybrid: "Hybrid unavailable",
-        });
-      }
-    } else {
-      if (countHybrid < 100) {
-        return ctx.send({
-          countOnline: countOnline,
-          statusOnline: "Online unavailable",
-          countHybrid: countHybrid,
-          statusHybrid: "Hybrid available",
-        });
-      } else if (countHybrid >= 100) {
-        return ctx.send({
-          countOnline: countOnline,
-          statusOnline: "Online unavailable",
-          countHybrid: countHybrid,
-          statusHybrid: "Hybrid unavailable",
-        });
-      }
-    }
+    const countDay2No = await strapi.db.query("api::ticket.ticket").count({
+      where: {
+        ticketType: "Day 2 (no workshop)",
+      },
+    });
+
+    const countBundle = await strapi.db.query("api::ticket.ticket").count({
+      where: {
+        ticketType: "Bundle",
+      },
+    });
+
+    const countBundleNo = await strapi.db.query("api::ticket.ticket").count({
+      where: {
+        ticketType: "Bundle (no workshop)",
+      },
+    });
+
+    return ctx.send({
+      countDay1: countDay1,
+      countDay2: countDay2,
+      countDay2No: countDay2No,
+      countBundle: countBundle,
+      countBundleNo: countBundleNo,
+    });
   },
 
   async create(ctx) {
     const { user } = ctx.state;
+    const stock = {
+      "Day 1": 150,
+      "Day 2": 150,
+      "Day 2 (no workshop)": 50,
+      "Bundle": 50,
+      "Bundle (no workshop)": 50,
+    }
 
     if (!user) {
       return ctx.unauthorized();
@@ -71,38 +70,13 @@ module.exports = createCoreController("api::ticket.ticket", {
           return ctx.badRequest("Ticket type is required");
         }
 
-        const countOnline = await strapi.db.query("api::ticket.ticket").count({
+        const count = await strapi.db.query("api::ticket.ticket").count({
           where: {
-            ticketType: "Online",
+            ticketType: `${data.ticketType}`,
           },
         });
 
-        const countHybrid = await strapi.db.query("api::ticket.ticket").count({
-          where: {
-            ticketType: "Hybrid",
-          },
-        });
-
-        if (data.ticketType === "Online" && countOnline < 500) {
-          const entryTicket = await strapi
-            .service("api::ticket.ticket")
-            .create({ data, files });
-
-          const updateTicket = await strapi.entityService.update(
-            "api::ticket.ticket",
-            entryTicket.id,
-            {
-              data: {
-                user: user.id,
-              },
-            }
-          );
-
-          return ctx.send({
-            entry: updateTicket,
-            status: "Ticket created",
-          });
-        } else if (data.ticketType === "Hybrid" && countHybrid < 100) {
+        if (count < stock[data.ticketType]) {
           const entryTicket = await strapi
             .service("api::ticket.ticket")
             .create({ data, files });
